@@ -1,0 +1,74 @@
+# get_unanswered_leads
+
+## Request (JSON-RPC over Streamable HTTP, POST /mcp)
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "get_unanswered_leads",
+    "arguments": {}
+  }
+}
+```
+
+## Response: tool text
+lead-3 - Sandra Ruiz (Facebook, +1 210 555 0119): Primary bathroom remodel. Waiting 52h.
+lead-1 - Maria Torres (web form, +1 210 555 0117): Full kitchen quote. Waiting 26h.
+lead-5 - Alicia Gomez (referral, +1 210 555 0121): Whole-home interior paint. Waiting 9h.
+lead-2 - David Klein (phone, +1 210 555 0118): Roof leak repair. Waiting 5h.
+
+## Response: structuredContent
+```json
+{
+  "leads": [
+    {
+      "id": "lead-3",
+      "name": "Sandra Ruiz",
+      "channel": "Facebook",
+      "phone": "+1 210 555 0119",
+      "topic": "Primary bathroom remodel",
+      "status": "new",
+      "receivedAt": "2026-10-14T20:34:04.455Z",
+      "firstResponseAt": null,
+      "thread": [],
+      "hoursWaiting": 52
+    },
+    {
+      "id": "lead-1",
+      "name": "Maria Torres",
+      "channel": "web form",
+      "phone": "+1 210 555 0117",
+      "topic": "Full kitchen quote",
+      "status": "new",
+      "receivedAt": "2026-10-15T22:34:04.455Z",
+      "firstResponseAt": null,
+      "thread": [],
+      "hoursWaiting": 26
+    },
+    {
+      "id": "lead-5",
+      "name": "Alicia Gomez",
+      "channel": "referral",
+      "phone": "+1 210 555 0121",
+      "topic": "Whole-home interior paint",
+      "status": "new",
+      "receivedAt": "2026-10-16T15:34:04.455Z",
+      "firstResponseAt": null,
+      "thread": [],
+      "hoursWaiting": 9
+    },
+    {
+      "id": "lead-2",
+      "name": "David Klein",
+      "channel": "phone",
+      "phone": "+1 210 555 0118",
+      "topic": "Roof leak repair",
+      "status": "new",
+      "receivedAt": "2026-10-16T19:34:04.455Z",
+      "firstResponseAt": null,
+      "thread": [],
+      "hoursWaiting": 5
+    }
+  ]
+}
+```

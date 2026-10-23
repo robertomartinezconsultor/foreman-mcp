@@ -1,0 +1,57 @@
+# get_job job-102 (the unassigned one)
+
+## Request (JSON-RPC over Streamable HTTP, POST /mcp)
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "get_job",
+    "arguments": {
+      "jobId": "job-102"
+    }
+  }
+}
+```
+
+## Response: tool text
+job-102 - Chen Duplex (88 Perrin Beitel Rd, San Antonio, TX)
+  Bathroom rough-in plumbing: Ready for rough-in
+  Crew: UNASSIGNED | Visit: 2026-10-18 09:30 (~5h) | Status: active
+  Materials needed: 1 x PEX pipe 3/4in 100ft (roll), 1 x PVC fittings assortment (box)
+  Thread:
+  [2026-10-16T16:34:04.455Z] Office: Permit approved. No crew assigned yet: this is the gap the morning dispatch must catch.
+
+## Response: structuredContent
+```json
+{
+  "job": {
+    "id": "job-102",
+    "customer": "Chen Duplex",
+    "address": "88 Perrin Beitel Rd, San Antonio, TX",
+    "service": "Bathroom rough-in plumbing",
+    "stage": "Ready for rough-in",
+    "status": "active",
+    "crewId": null,
+    "scheduledDate": "2026-10-18",
+    "scheduledTime": "09:30",
+    "estimatedHours": 5,
+    "materialsNeeded": [
+      {
+        "item": "PEX pipe 3/4in 100ft (roll)",
+        "qty": 1
+      },
+      {
+        "item": "PVC fittings assortment (box)",
+        "qty": 1
+      }
+    ],
+    "notes": [
+      {
+        "at": "2026-10-16T16:34:04.455Z",
+        "author": "Office",
+        "text": "Permit approved. No crew assigned yet: this is the gap the morning dispatch must catch."
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,45 @@
+# get_day_briefing
+
+## Request (JSON-RPC over Streamable HTTP, POST /mcp)
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "get_day_briefing",
+    "arguments": {}
+  }
+}
+```
+
+## Response: tool text
+Briefing for 2026-10-17: 2 job(s) on the schedule today.
+Needs attention tomorrow: Chen Duplex (Bathroom rough-in plumbing, 09:30) has no crew assigned.
+Unanswered leads past the response SLA: Maria Torres (Full kitchen quote, waiting 26h); David Klein (Roof leak repair, waiting 5h); Sandra Ruiz (Primary bathroom remodel, waiting 52h); Alicia Gomez (Whole-home interior paint, waiting 9h).
+Low stock: Porcelain tile 12x24 (box): 9 box left; Thinset mortar 50lb (bag): 3 bag left.
+Outbox is empty.
+
+## Response: structuredContent
+```json
+{
+  "date": "2026-10-17",
+  "jobsToday": [
+    "job-104",
+    "job-105"
+  ],
+  "unassignedTomorrow": [
+    "Chen Duplex (Bathroom rough-in plumbing, 09:30)"
+  ],
+  "staleLeads": [
+    "Maria Torres (Full kitchen quote, waiting 26h)",
+    "David Klein (Roof leak repair, waiting 5h)",
+    "Sandra Ruiz (Primary bathroom remodel, waiting 52h)",
+    "Alicia Gomez (Whole-home interior paint, waiting 9h)"
+  ],
+  "lowStock": [
+    "Porcelain tile 12x24 (box): 9 box left",
+    "Thinset mortar 50lb (bag): 3 bag left"
+  ],
+  "outboxQueued": 0,
+  "composer": "deterministic"
+}
+```

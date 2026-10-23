@@ -1,0 +1,27 @@
+# assign_crew job-102 -> crew-b
+
+## Request (JSON-RPC over Streamable HTTP, POST /mcp)
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "assign_crew",
+    "arguments": {
+      "jobId": "job-102",
+      "crewId": "crew-b"
+    }
+  }
+}
+```
+
+## Response: tool text
+Crew B (Carlos Ruiz, Diego Fuentes) is now assigned to Chen Duplex (job-102) on 2026-10-18 at 09:30. Was: UNASSIGNED.
+
+## Response: structuredContent
+```json
+{
+  "jobId": "job-102",
+  "crewId": "crew-b",
+  "crewName": "Crew B"
+}
+```

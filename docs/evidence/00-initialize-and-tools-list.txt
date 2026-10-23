@@ -1,0 +1,30 @@
+# initialize + tools/list
+
+Negotiated result:
+```json
+{
+  "protocolVersion": "2025-11-25",
+  "capabilities": {
+    "tools": {
+      "listChanged": true
+    }
+  },
+  "serverInfo": {
+    "name": "foreman-mcp",
+    "version": "0.2.0"
+  }
+}
+```
+
+Tools (11):
+- get_day_briefing: Owner briefing for today: jobs on the schedule, tomorrow's unassigned work, leads past the response SLA, low stock and outbox status.
+- list_jobs: List jobs with stage, crew and scheduled visit. Optional date filter (YYYY-MM-DD).
+- get_job: Full detail of one job, including its field-update thread (the business's memory of that job).
+- get_unanswered_leads: Leads still waiting for a first reply, longest wait first, with hours waiting and contact info.
+- check_inventory: Inventory levels; flags items at or below their low-stock threshold.
+- log_field_update: Record a field update from a worker against a job (progress, problem, material note). This is how the business remembers what the field reported.
+- assign_crew: Assign a crew to a job (or reassign). Crew ids: crew-a, crew-b, crew-c; list with list_jobs output or get_day_briefing.
+- queue_dispatch: Queue a dispatch message to a crew or the owner in the outbox. The outbox is the delivery queue the ops console shows; messages persist.
+- record_lead_reply: Record that a lead got a reply: saves the reply text on the lead's thread and closes the follow-up clock. State persists across sessions.
+- create_shopping_list: Create an approval-gated shopping list draft. Without a job: restock every low item up to its threshold. With a job id: cover that job's material shortfall. Nothing is purchased; the draft waits for the owner's approval.
+- run_morning_dispatch: THE agentic flow: prepare tomorrow end to end. Detects gaps (unassigned crews, double-bookings, material shortfalls, leads past the response SLA), composes and queues a dispatch per crew plus an owner summary with ready-to-send lead replies, and drafts an approval-gated shopping list for shortfalls.

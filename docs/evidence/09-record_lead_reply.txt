@@ -1,0 +1,27 @@
+# record_lead_reply lead-3 (52h wait)
+
+## Request (JSON-RPC over Streamable HTTP, POST /mcp)
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "record_lead_reply",
+    "arguments": {
+      "leadId": "lead-3",
+      "text": "Apologized for the wait and booked the on-site bathroom estimate for Friday 10am."
+    }
+  }
+}
+```
+
+## Response: tool text
+Reply recorded for Sandra Ruiz (lead-3). First response landed after 52h of waiting; the lead is off the unanswered list and the thread is saved.
+
+## Response: structuredContent
+```json
+{
+  "leadId": "lead-3",
+  "status": "replied",
+  "waitedHours": 52
+}
+```

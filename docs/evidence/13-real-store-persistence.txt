@@ -1,0 +1,42 @@
+# Persistence proof against the REAL default store (proyecto/data/store.json)
+
+Run on 2026-10-17 with the built server (dist/index.js), no FOREMAN_DATA_DIR
+override: the store is the shipped default, <project>/data/store.json.
+
+## Boot 1 (fresh seed created on disk)
+
+GET /health ->
+
+```json
+{"name":"foreman-mcp","status":"ok","mcpEndpoint":"/mcp","spec":"2025-11-25","composer":"deterministic","store":{"jobs":7,"leads":5,"outbox":0,"shoppingListsPending":0}}
+```
+
+tools/call queue_dispatch { "to": "Crew C", "message": "REAL-STORE-PROOF: primer is at the shop, pick it up before the Romero job." } ->
+
+```
+Queued dispatch out-1 for Crew C (Pedro Navarro, Luis Ortega). Outbox now holds 1 message(s).
+```
+
+## Server process killed. Boot 2 (same disk, no re-seed)
+
+GET /state -> outbox still holds the boot-1 dispatch:
+
+```json
+[
+  {
+    "id": "out-1",
+    "to": "Crew C (Pedro Navarro, Luis Ortega)",
+    "channel": "crew",
+    "message": "REAL-STORE-PROOF: primer is at the shop, pick it up before the Romero job.",
+    "queuedAt": "2026-10-17T00:32:36.734Z",
+    "status": "queued"
+  }
+]
+```
+
+Audit tail: dispatch.queued by owner at 2026-10-17T00:32:36.734Z (written in boot 1,
+read back in boot 2).
+
+Conclusion: business state is on disk (data/store.json, 10,741 bytes after this
+run) and survives full process restarts. The shipped repo deletes store.json;
+the server re-seeds the demo dataset on first boot.

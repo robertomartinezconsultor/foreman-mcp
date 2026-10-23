@@ -1,0 +1,40 @@
+# list_jobs (tomorrow)
+
+## Request (JSON-RPC over Streamable HTTP, POST /mcp)
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "list_jobs",
+    "arguments": {
+      "date": "2026-10-18"
+    }
+  }
+}
+```
+
+## Response: tool text
+job-101 - Garcia Residence (1420 W Bitters Rd, San Antonio, TX)
+  Kitchen remodel: Tile in progress (backsplash pending)
+  Crew: Crew A | Visit: 2026-10-18 08:00 (~6h) | Status: active
+job-102 - Chen Duplex (88 Perrin Beitel Rd, San Antonio, TX)
+  Bathroom rough-in plumbing: Ready for rough-in
+  Crew: UNASSIGNED | Visit: 2026-10-18 09:30 (~5h) | Status: active
+job-106 - Okafor Flooring (15900 La Cantera Pkwy, San Antonio, TX)
+  LVP flooring install: Materials on site, install pending
+  Crew: Crew C | Visit: 2026-10-18 10:00 (~5h) | Status: active
+job-103 - Nguyen Kitchen (1211 McCullough Ave, San Antonio, TX)
+  Cabinet installation: Cabinets delivered, install pending
+  Crew: Crew A | Visit: 2026-10-18 13:00 (~4h) | Status: active
+
+## Response: structuredContent
+```json
+{
+  "jobs": [
+    "job-101",
+    "job-102",
+    "job-106",
+    "job-103"
+  ]
+}
+```

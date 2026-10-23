@@ -1,0 +1,26 @@
+# queue_dispatch to Crew B
+
+## Request (JSON-RPC over Streamable HTTP, POST /mcp)
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "queue_dispatch",
+    "arguments": {
+      "to": "Crew B",
+      "message": "You are on the Chen Duplex rough-in tomorrow 09:30. Permit is approved; PEX and fittings are at the shop, rack 4."
+    }
+  }
+}
+```
+
+## Response: tool text
+Queued dispatch out-4 for Crew B (Carlos Ruiz, Diego Fuentes). Outbox now holds 4 message(s).
+
+## Response: structuredContent
+```json
+{
+  "outboxId": "out-4",
+  "outboxSize": 4
+}
+```

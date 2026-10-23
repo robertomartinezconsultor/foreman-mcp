@@ -1,0 +1,42 @@
+# check_inventory (onlyLow)
+
+## Request (JSON-RPC over Streamable HTTP, POST /mcp)
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "check_inventory",
+    "arguments": {
+      "onlyLow": true
+    }
+  }
+}
+```
+
+## Response: tool text
+Porcelain tile 12x24 (box): 9 box on hand (Shop rack 2) [LOW: threshold 10]
+Thinset mortar 50lb (bag): 3 bag on hand (Shop rack 2) [LOW: threshold 6]
+
+## Response: structuredContent
+```json
+{
+  "items": [
+    {
+      "id": "inv-1",
+      "item": "Porcelain tile 12x24 (box)",
+      "unit": "box",
+      "onHand": 9,
+      "lowAt": 10,
+      "location": "Shop rack 2"
+    },
+    {
+      "id": "inv-2",
+      "item": "Thinset mortar 50lb (bag)",
+      "unit": "bag",
+      "onHand": 3,
+      "lowAt": 6,
+      "location": "Shop rack 2"
+    }
+  ]
+}
+```

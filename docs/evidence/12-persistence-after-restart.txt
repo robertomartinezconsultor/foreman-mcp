@@ -1,0 +1,578 @@
+# Persistence proof: server killed and rebooted on the same store
+
+After boot 2, with NO re-seeding:
+
+## get_job job-102: crew assignment from boot 1 is still there
+job-102 - Chen Duplex (88 Perrin Beitel Rd, San Antonio, TX)
+  Bathroom rough-in plumbing: Ready for rough-in
+  Crew: Crew B | Visit: 2026-10-18 09:30 (~5h) | Status: active
+  Materials needed: 1 x PEX pipe 3/4in 100ft (roll), 1 x PVC fittings assortment (box)
+  Thread:
+  [2026-10-16T16:34:04.455Z] Office: Permit approved. No crew assigned yet: this is the gap the morning dispatch must catch.
+
+## get_job job-101: field update + stage change from boot 1 are still there
+job-101 - Garcia Residence (1420 W Bitters Rd, San Antonio, TX)
+  Kitchen remodel: Tile in progress (layout approved)
+  Crew: Crew A | Visit: 2026-10-18 08:00 (~6h) | Status: active
+  Materials needed: 6 x Porcelain tile 12x24 (box), 4 x Thinset mortar 50lb (bag)
+  Thread:
+  [2026-10-15T18:34:04.455Z] Juan Herrera (Crew A): Countertops are in. Tile starts tomorrow morning; thinset is running low at the shop.
+  [2026-10-15T22:34:04.455Z] Office: Homeowner asked about backsplash options; bring the sample board.
+  [2026-10-17T00:34:05.097Z] Juan Herrera (Crew A): Tile layout approved by the homeowner; starting cuts at 8am sharp.
+
+## get_unanswered_leads: lead-3 (replied in boot 1) is gone from the list
+lead-1 - Maria Torres (web form, +1 210 555 0117): Full kitchen quote. Waiting 26h.
+lead-5 - Alicia Gomez (referral, +1 210 555 0121): Whole-home interior paint. Waiting 9h.
+lead-2 - David Klein (phone, +1 210 555 0118): Roof leak repair. Waiting 5h.
+
+## The store file itself (data/store.json in the store dir)
+```json
+{
+  "version": 1,
+  "createdAt": "2026-10-17T00:34:04.455Z",
+  "crews": [
+    {
+      "id": "crew-a",
+      "name": "Crew A",
+      "members": [
+        "Juan Herrera",
+        "Miguel Santos"
+      ],
+      "skills": [
+        "tile",
+        "kitchen",
+        "finish carpentry"
+      ],
+      "phone": "+1 210 555 0141"
+    },
+    {
+      "id": "crew-b",
+      "name": "Crew B",
+      "members": [
+        "Carlos Ruiz",
+        "Diego Fuentes"
+      ],
+      "skills": [
+        "plumbing",
+        "roofing",
+        "repairs"
+      ],
+      "phone": "+1 210 555 0142"
+    },
+    {
+      "id": "crew-c",
+      "name": "Crew C",
+      "members": [
+        "Pedro Navarro",
+        "Luis Ortega"
+      ],
+      "skills": [
+        "paint",
+        "drywall",
+        "flooring"
+      ],
+      "phone": "+1 210 555 0143"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "job-101",
+      "customer": "Garcia Residence",
+      "address": "1420 W Bitters Rd, San Antonio, TX",
+      "service": "Kitchen remodel",
+      "stage": "Tile in progress (layout approved)",
+      "status": "active",
+      "crewId": "crew-a",
+      "scheduledDate": "2026-10-18",
+      "scheduledTime": "08:00",
+      "estimatedHours": 6,
+      "materialsNeeded": [
+        {
+          "item": "Porcelain tile 12x24 (box)",
+          "qty": 6
+        },
+        {
+          "item": "Thinset mortar 50lb (bag)",
+          "qty": 4
+        }
+      ],
+      "notes": [
+        {
+          "at": "2026-10-15T18:34:04.455Z",
+          "author": "Juan Herrera (Crew A)",
+          "text": "Countertops are in. Tile starts tomorrow morning; thinset is running low at the shop."
+        },
+        {
+          "at": "2026-10-15T22:34:04.455Z",
+          "author": "Office",
+          "text": "Homeowner asked about backsplash options; bring the sample board."
+        },
+        {
+          "at": "2026-10-17T00:34:05.097Z",
+          "author": "Juan Herrera (Crew A)",
+          "text": "Tile layout approved by the homeowner; starting cuts at 8am sharp."
+        }
+      ]
+    },
+    {
+      "id": "job-102",
+      "customer": "Chen Duplex",
+      "address": "88 Perrin Beitel Rd, San Antonio, TX",
+      "service": "Bathroom rough-in plumbing",
+      "stage": "Ready for rough-in",
+      "status": "active",
+      "crewId": "crew-b",
+      "scheduledDate": "2026-10-18",
+      "scheduledTime": "09:30",
+      "estimatedHours": 5,
+      "materialsNeeded": [
+        {
+          "item": "PEX pipe 3/4in 100ft (roll)",
+          "qty": 1
+        },
+        {
+          "item": "PVC fittings assortment (box)",
+          "qty": 1
+        }
+      ],
+      "notes": [
+        {
+          "at": "2026-10-16T16:34:04.455Z",
+          "author": "Office",
+          "text": "Permit approved. No crew assigned yet: this is the gap the morning dispatch must catch."
+        }
+      ]
+    },
+    {
+      "id": "job-103",
+      "customer": "Nguyen Kitchen",
+      "address": "1211 McCullough Ave, San Antonio, TX",
+      "service": "Cabinet installation",
+      "stage": "Cabinets delivered, install pending",
+      "status": "active",
+      "crewId": "crew-a",
+      "scheduledDate": "2026-10-18",
+      "scheduledTime": "13:00",
+      "estimatedHours": 4,
+      "materialsNeeded": [
+        {
+          "item": "Wood screws 2.5in (box)",
+          "qty": 1
+        }
+      ],
+      "notes": [
+        {
+          "at": "2026-10-16T04:34:04.455Z",
+          "author": "Office",
+          "text": "Same crew as Garcia in the morning: route Garcia 08:00, Nguyen 13:00."
+        }
+      ]
+    },
+    {
+      "id": "job-104",
+      "customer": "Romero Exterior",
+      "address": "4303 Vance Jackson Rd, San Antonio, TX",
+      "service": "Exterior paint",
+      "stage": "Power wash done, prime next",
+      "status": "active",
+      "crewId": "crew-c",
+      "scheduledDate": "2026-10-17",
+      "scheduledTime": "08:00",
+      "estimatedHours": 7,
+      "materialsNeeded": [
+        {
+          "item": "Exterior primer (gal)",
+          "qty": 3
+        },
+        {
+          "item": "Exterior paint (gal)",
+          "qty": 6
+        }
+      ],
+      "notes": [
+        {
+          "at": "2026-10-16T20:34:04.455Z",
+          "author": "Pedro Navarro (Crew C)",
+          "text": "Wash is done and dry. Starting primer after lunch if the wind stays down."
+        }
+      ]
+    },
+    {
+      "id": "job-105",
+      "customer": "Smith Residence",
+      "address": "7722 Callaghan Rd, San Antonio, TX",
+      "service": "Roof leak repair",
+      "stage": "Inspection done, repair scheduled",
+      "status": "active",
+      "crewId": "crew-b",
+      "scheduledDate": "2026-10-17",
+      "scheduledTime": "10:00",
+      "estimatedHours": 3,
+      "materialsNeeded": [
+        {
+          "item": "Silicone sealant (tube)",
+          "qty": 4
+        }
+      ],
+      "notes": [
+        {
+          "at": "2026-10-14T22:34:04.455Z",
+          "author": "Carlos Ruiz (Crew B)",
+          "text": "Leak traced to a cracked vent boot. Sealant repair first; quote the boot replacement after."
+        }
+      ]
+    },
+    {
+      "id": "job-106",
+      "customer": "Okafor Flooring",
+      "address": "15900 La Cantera Pkwy, San Antonio, TX",
+      "service": "LVP flooring install",
+      "stage": "Materials on site, install pending",
+      "status": "active",
+      "crewId": "crew-c",
+      "scheduledDate": "2026-10-18",
+      "scheduledTime": "10:00",
+      "estimatedHours": 5,
+      "materialsNeeded": [
+        {
+          "item": "LVP flooring planks (box)",
+          "qty": 14
+        },
+        {
+          "item": "Underlayment (roll)",
+          "qty": 2
+        }
+      ],
+      "notes": [
+        {
+          "at": "2026-10-16T12:34:04.455Z",
+          "author": "Office",
+          "text": "Customer moved furniture out already; floor can start on arrival."
+        }
+      ]
+    },
+    {
+      "id": "job-107",
+      "customer": "Patel Bathroom",
+      "address": "9022 Wurzbach Rd, San Antonio, TX",
+      "service": "Bathroom remodel",
+      "stage": "Demo complete, tile starts in two days",
+      "status": "active",
+      "crewId": "crew-a",
+      "scheduledDate": "2026-10-19",
+      "scheduledTime": "08:00",
+      "estimatedHours": 6,
+      "materialsNeeded": [
+        {
+          "item": "Porcelain tile 12x24 (box)",
+          "qty": 8
+        },
+        {
+          "item": "Grout 25lb (bag)",
+          "qty": 2
+        }
+      ],
+      "notes": [
+        {
+          "at": "2026-10-15T20:34:04.455Z",
+          "author": "Juan Herrera (Crew A)",
+          "text": "Demo done, subfloor is solid. No surprises behind the walls."
+        }
+      ]
+    }
+  ],
+  "leads": [
+    {
+      "id": "lead-1",
+      "name": "Maria Torres",
+      "channel": "web form",
+      "phone": "+1 210 555 0117",
+      "topic": "Full kitchen quote",
+      "status": "new",
+      "receivedAt": "2026-10-15T22:34:04.455Z",
+      "firstResponseAt": null,
+      "thread": []
+    },
+    {
+      "id": "lead-2",
+      "name": "David Klein",
+      "channel": "phone",
+      "phone": "+1 210 555 0118",
+      "topic": "Roof leak repair",
+      "status": "new",
+      "receivedAt": "2026-10-16T19:34:04.455Z",
+      "firstResponseAt": null,
+      "thread": []
+    },
+    {
+      "id": "lead-3",
+      "name": "Sandra Ruiz",
+      "channel": "Facebook",
+      "phone": "+1 210 555 0119",
+      "topic": "Primary bathroom remodel",
+      "status": "replied",
+      "receivedAt": "2026-10-14T20:34:04.455Z",
+      "firstResponseAt": "2026-10-17T00:34:05.124Z",
+      "thread": [
+        {
+          "at": "2026-10-17T00:34:05.124Z",
+          "author": "Office",
+          "text": "Apologized for the wait and booked the on-site bathroom estimate for Friday 10am."
+        }
+      ]
+    },
+    {
+      "id": "lead-4",
+      "name": "Tom Becker",
+      "channel": "web form",
+      "phone": "+1 210 555 0120",
+      "topic": "Flooring estimate, 900 sq ft",
+      "status": "replied",
+      "receivedAt": "2026-10-15T18:34:04.455Z",
+      "firstResponseAt": "2026-10-15T19:34:04.455Z",
+      "thread": [
+        {
+          "at": "2026-10-15T19:34:04.455Z",
+          "author": "Office",
+          "text": "Sent the ballpark range and asked for the room measurements; waiting on his reply."
+        }
+      ]
+    },
+    {
+      "id": "lead-5",
+      "name": "Alicia Gomez",
+      "channel": "referral",
+      "phone": "+1 210 555 0121",
+      "topic": "Whole-home interior paint",
+      "status": "new",
+      "receivedAt": "2026-10-16T15:34:04.455Z",
+      "firstResponseAt": null,
+      "thread": []
+    }
+  ],
+  "inventory": [
+    {
+      "id": "inv-1",
+      "item": "Porcelain tile 12x24 (box)",
+      "unit": "box",
+      "onHand": 9,
+      "lowAt": 10,
+      "location": "Shop rack 2"
+    },
+    {
+      "id": "inv-2",
+      "item": "Thinset mortar 50lb (bag)",
+      "unit": "bag",
+      "onHand": 3,
+      "lowAt": 6,
+      "location": "Shop rack 2"
+    },
+    {
+      "id": "inv-3",
+      "item": "Grout 25lb (bag)",
+      "unit": "bag",
+      "onHand": 5,
+      "lowAt": 3,
+      "location": "Shop rack 2"
+    },
+    {
+      "id": "inv-4",
+      "item": "PEX pipe 3/4in 100ft (roll)",
+      "unit": "roll",
+      "onHand": 2,
+      "lowAt": 1,
+      "location": "Shop rack 4"
+    },
+    {
+      "id": "inv-5",
+      "item": "PVC fittings assortment (box)",
+      "unit": "box",
+      "onHand": 4,
+      "lowAt": 2,
+      "location": "Shop rack 4"
+    },
+    {
+      "id": "inv-6",
+      "item": "LVP flooring planks (box)",
+      "unit": "box",
+      "onHand": 20,
+      "lowAt": 8,
+      "location": "Warehouse bay 1"
+    },
+    {
+      "id": "inv-7",
+      "item": "Underlayment (roll)",
+      "unit": "roll",
+      "onHand": 3,
+      "lowAt": 2,
+      "location": "Warehouse bay 1"
+    },
+    {
+      "id": "inv-8",
+      "item": "Exterior primer (gal)",
+      "unit": "gal",
+      "onHand": 4,
+      "lowAt": 3,
+      "location": "Paint locker"
+    },
+    {
+      "id": "inv-9",
+      "item": "Exterior paint (gal)",
+      "unit": "gal",
+      "onHand": 8,
+      "lowAt": 4,
+      "location": "Paint locker"
+    },
+    {
+      "id": "inv-10",
+      "item": "Silicone sealant (tube)",
+      "unit": "tube",
+      "onHand": 6,
+      "lowAt": 4,
+      "location": "Crew B truck"
+    },
+    {
+      "id": "inv-11",
+      "item": "Wood screws 2.5in (box)",
+      "unit": "box",
+      "onHand": 7,
+      "lowAt": 2,
+      "location": "Shop rack 1"
+    }
+  ],
+  "outbox": [
+    {
+      "id": "out-1",
+      "to": "Crew A (Juan Herrera, Miguel Santos)",
+      "channel": "crew",
+      "message": "Crew A dispatch for 2026-10-18: 08:00 Garcia Residence, 1420 W Bitters Rd, San Antonio, TX (Kitchen remodel: Tile in progress (backsplash pending); ~6h) | 13:00 Nguyen Kitchen, 1211 McCullough Ave, San Antonio, TX (Cabinet installation: Cabinets delivered, install pending; ~4h). Heads-up: Thinset mortar 50lb (bag): need 4 across tomorrow's jobs, only 3 on hand. Reply with field updates as you go.",
+      "queuedAt": "2026-10-17T00:34:05.025Z",
+      "status": "queued",
+      "relatedJobId": "job-101"
+    },
+    {
+      "id": "out-2",
+      "to": "Crew C (Pedro Navarro, Luis Ortega)",
+      "channel": "crew",
+      "message": "Crew C dispatch for 2026-10-18: 10:00 Okafor Flooring, 15900 La Cantera Pkwy, San Antonio, TX (LVP flooring install: Materials on site, install pending; ~5h). Reply with field updates as you go.",
+      "queuedAt": "2026-10-17T00:34:05.025Z",
+      "status": "queued",
+      "relatedJobId": "job-106"
+    },
+    {
+      "id": "out-3",
+      "to": "Owner",
+      "channel": "owner",
+      "message": "Morning dispatch for 2026-10-18: 4 job(s) scheduled.\nGaps to fix: Chen Duplex (Bathroom rough-in plumbing) at 09:30 has no crew assigned; Thinset mortar 50lb (bag): need 4 across tomorrow's jobs, only 3 on hand.\n4 lead(s) past the 4h response SLA. Suggested replies:\n- To Maria Torres (Full kitchen quote): \"Hi Maria, thanks for reaching out about full kitchen quote. Sorry for the wait (26h). We can come out for a free on-site estimate this week; what day works for you? - First Class Remodeling\"\n- To David Klein (Roof leak repair): \"Hi David, thanks for reaching out about roof leak repair. Sorry for the wait (5h). We can come out for a free on-site estimate this week; what day works for you? - First Class Remodeling\"\n- To Sandra Ruiz (Primary bathroom remodel): \"Hi Sandra, thanks for reaching out about primary bathroom remodel. Sorry for the wait (52h). We can come out for a free on-site estimate this week; what day works for you? - First Class Remodeling\"\n- To Alicia Gomez (Whole-home interior paint): \"Hi Alicia, thanks for reaching out about whole-home interior paint. Sorry for the wait (9h). We can come out for a free on-site estimate this week; what day works for you? - First Class Remodeling\"",
+      "queuedAt": "2026-10-17T00:34:05.026Z",
+      "status": "queued"
+    },
+    {
+      "id": "out-4",
+      "to": "Crew B (Carlos Ruiz, Diego Fuentes)",
+      "channel": "crew",
+      "message": "You are on the Chen Duplex rough-in tomorrow 09:30. Permit is approved; PEX and fittings are at the shop, rack 4.",
+      "queuedAt": "2026-10-17T00:34:05.195Z",
+      "status": "queued"
+    }
+  ],
+  "shoppingLists": [
+    {
+      "id": "shop-1",
+      "createdAt": "2026-10-17T00:34:05.026Z",
+      "createdBy": "run_morning_dispatch",
+      "status": "pending_approval",
+      "items": [
+        {
+          "item": "Thinset mortar 50lb (bag)",
+          "unit": "bag",
+          "qty": 1,
+          "reason": "Shortfall for 2026-10-18: need 4, on hand 3"
+        }
+      ]
+    },
+    {
+      "id": "shop-2",
+      "createdAt": "2026-10-17T00:34:05.222Z",
+      "createdBy": "owner (via create_shopping_list)",
+      "status": "pending_approval",
+      "items": [
+        {
+          "item": "Porcelain tile 12x24 (box)",
+          "unit": "box",
+          "qty": 1,
+          "reason": "Restock to threshold 10 (on hand 9)"
+        },
+        {
+          "item": "Thinset mortar 50lb (bag)",
+          "unit": "bag",
+          "qty": 3,
+          "reason": "Restock to threshold 6 (on hand 3)"
+        }
+      ]
+    }
+  ],
+  "audit": [
+    {
+      "at": "2026-10-17T00:34:04.455Z",
+      "actor": "system",
+      "action": "store.seeded",
+      "detail": "Demo store created with the remodeling seed dataset."
+    },
+    {
+      "at": "2026-10-17T00:34:05.025Z",
+      "actor": "run_morning_dispatch",
+      "action": "dispatch.queued",
+      "detail": "Dispatch for Crew A on 2026-10-18: 2 stop(s)."
+    },
+    {
+      "at": "2026-10-17T00:34:05.025Z",
+      "actor": "run_morning_dispatch",
+      "action": "dispatch.queued",
+      "detail": "Dispatch for Crew C on 2026-10-18: 1 stop(s)."
+    },
+    {
+      "at": "2026-10-17T00:34:05.026Z",
+      "actor": "run_morning_dispatch",
+      "action": "dispatch.owner_summary",
+      "detail": "Owner summary queued: 6 gap(s), 4 lead nudge(s)."
+    },
+    {
+      "at": "2026-10-17T00:34:05.026Z",
+      "actor": "run_morning_dispatch",
+      "action": "shopping_list.created",
+      "detail": "Draft shop-1 pending approval: 1 x Thinset mortar 50lb (bag)."
+    },
+    {
+      "at": "2026-10-17T00:34:05.063Z",
+      "actor": "owner",
+      "action": "job.crew_assigned",
+      "detail": "job-102 (Chen Duplex): UNASSIGNED -> Crew B for 2026-10-18 09:30."
+    },
+    {
+      "at": "2026-10-17T00:34:05.097Z",
+      "actor": "Juan Herrera (Crew A)",
+      "action": "job.field_update",
+      "detail": "job-101: Tile layout approved by the homeowner; starting cuts at 8am sharp. (stage -> Tile in progress (layout approved))"
+    },
+    {
+      "at": "2026-10-17T00:34:05.125Z",
+      "actor": "Office",
+      "action": "lead.replied",
+      "detail": "lead-3 (Sandra Ruiz) after 52h: Apologized for the wait and booked the on-site bathroom estimate for Friday 10am."
+    },
+    {
+      "at": "2026-10-17T00:34:05.195Z",
+      "actor": "owner",
+      "action": "dispatch.queued",
+      "detail": "To Crew B (Carlos Ruiz, Diego Fuentes): You are on the Chen Duplex rough-in tomorrow 09:30. Permit is approved; PEX and fittings are at the shop, rack 4."
+    },
+    {
+      "at": "2026-10-17T00:34:05.222Z",
+      "actor": "owner",
+      "action": "shopping_list.created",
+      "detail": "Draft shop-2 pending approval: 1 x Porcelain tile 12x24 (box), 3 x Thinset mortar 50lb (bag)."
+    }
+  ]
+}
+```

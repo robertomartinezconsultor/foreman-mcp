@@ -1,0 +1,28 @@
+# log_field_update on job-101
+
+## Request (JSON-RPC over Streamable HTTP, POST /mcp)
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "log_field_update",
+    "arguments": {
+      "jobId": "job-101",
+      "author": "Juan Herrera (Crew A)",
+      "text": "Tile layout approved by the homeowner; starting cuts at 8am sharp.",
+      "newStage": "Tile in progress (layout approved)"
+    }
+  }
+}
+```
+
+## Response: tool text
+Logged on Garcia Residence (job-101) by Juan Herrera (Crew A): "Tile layout approved by the homeowner; starting cuts at 8am sharp." Stage is now "Tile in progress (layout approved)". The update is saved and will survive restarts.
+
+## Response: structuredContent
+```json
+{
+  "jobId": "job-101",
+  "notesOnJob": 3
+}
+```

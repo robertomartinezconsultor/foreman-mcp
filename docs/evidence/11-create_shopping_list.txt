@@ -1,0 +1,41 @@
+# create_shopping_list (restock low items)
+
+## Request (JSON-RPC over Streamable HTTP, POST /mcp)
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "create_shopping_list",
+    "arguments": {}
+  }
+}
+```
+
+## Response: tool text
+Shopping list shop-2 created and PENDING APPROVAL (nothing purchased): 1 box of Porcelain tile 12x24 (box) (Restock to threshold 10 (on hand 9)); 3 bag of Thinset mortar 50lb (bag) (Restock to threshold 6 (on hand 3)).
+
+## Response: structuredContent
+```json
+{
+  "shoppingList": {
+    "id": "shop-2",
+    "createdAt": "2026-10-17T00:34:05.222Z",
+    "createdBy": "owner (via create_shopping_list)",
+    "status": "pending_approval",
+    "items": [
+      {
+        "item": "Porcelain tile 12x24 (box)",
+        "unit": "box",
+        "qty": 1,
+        "reason": "Restock to threshold 10 (on hand 9)"
+      },
+      {
+        "item": "Thinset mortar 50lb (bag)",
+        "unit": "bag",
+        "qty": 3,
+        "reason": "Restock to threshold 6 (on hand 3)"
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,73 @@
+# run_morning_dispatch (the agentic flow)
+
+## Request (JSON-RPC over Streamable HTTP, POST /mcp)
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "run_morning_dispatch",
+    "arguments": {}
+  }
+}
+```
+
+## Response: tool text
+Morning dispatch for 2026-10-18 done. 4 job(s) tomorrow, 2 crew dispatch(es) queued, 6 gap(s) found, shopping draft shop-1 awaiting approval.
+Gaps:
+- [unassigned_crew] Chen Duplex (Bathroom rough-in plumbing) at 09:30 has no crew assigned
+- [material_shortfall] Thinset mortar 50lb (bag): need 4 across tomorrow's jobs, only 3 on hand
+- [unanswered_lead] Maria Torres (Full kitchen quote) has waited 26h with no first reply
+- [unanswered_lead] David Klein (Roof leak repair) has waited 5h with no first reply
+- [unanswered_lead] Sandra Ruiz (Primary bathroom remodel) has waited 52h with no first reply
+- [unanswered_lead] Alicia Gomez (Whole-home interior paint) has waited 9h with no first reply
+
+## Response: structuredContent
+```json
+{
+  "date": "2026-10-18",
+  "jobsScheduled": 4,
+  "crewsDispatched": [
+    "Crew A",
+    "Crew C"
+  ],
+  "dispatchesQueued": 3,
+  "leadNudges": 4,
+  "gaps": [
+    {
+      "type": "unassigned_crew",
+      "jobId": "job-102",
+      "detail": "Chen Duplex (Bathroom rough-in plumbing) at 09:30 has no crew assigned"
+    },
+    {
+      "type": "material_shortfall",
+      "jobId": "job-101",
+      "detail": "Thinset mortar 50lb (bag): need 4 across tomorrow's jobs, only 3 on hand",
+      "item": "Thinset mortar 50lb (bag)",
+      "need": 4,
+      "onHand": 3
+    },
+    {
+      "type": "unanswered_lead",
+      "leadId": "lead-1",
+      "detail": "Maria Torres (Full kitchen quote) has waited 26h with no first reply"
+    },
+    {
+      "type": "unanswered_lead",
+      "leadId": "lead-2",
+      "detail": "David Klein (Roof leak repair) has waited 5h with no first reply"
+    },
+    {
+      "type": "unanswered_lead",
+      "leadId": "lead-3",
+      "detail": "Sandra Ruiz (Primary bathroom remodel) has waited 52h with no first reply"
+    },
+    {
+      "type": "unanswered_lead",
+      "leadId": "lead-5",
+      "detail": "Alicia Gomez (Whole-home interior paint) has waited 9h with no first reply"
+    }
+  ],
+  "shoppingListId": "shop-1",
+  "headline": "4 job(s) tomorrow, 2 crew dispatch(es) queued, 6 gap(s) found, shopping draft shop-1 awaiting approval."
+}
+```

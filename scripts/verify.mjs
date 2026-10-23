@@ -137,8 +137,26 @@ try {
   const consoleHtml = await consoleRes.text();
   check(
     "ops console serves the live business console",
-    consoleRes.ok && consoleHtml.includes("Foreman MCP") && consoleHtml.includes("Voice command simulator"),
+    consoleRes.ok && consoleHtml.includes("Foreman MCP") && consoleHtml.includes("Voice command simulator") && consoleHtml.includes("Approve purchase"),
     `HTTP ${consoleRes.status}`,
+  );
+
+  // The human gate, exercised the way the console exercises it: approve the
+  // restock draft created above and watch the state change.
+  console.log("== console approval (click -> state) ==");
+  const shopId = shop.structuredContent?.shoppingList?.id;
+  const approveRes = await fetch(`${server.base}/console/approve`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ listId: shopId, decision: "approved" }),
+  });
+  const approveJson = await approveRes.json();
+  check("console approve accepts the owner decision", approveRes.ok && approveJson.shoppingList?.status === "approved", JSON.stringify(approveJson));
+  const state1 = await (await fetch(`${server.base}/state`)).json();
+  check(
+    "approval is reflected in /state",
+    state1.shoppingLists.find((s) => s.id === shopId)?.status === "approved",
+    JSON.stringify(state1.shoppingLists?.map((s) => [s.id, s.status])),
   );
 
   await stopServer(server.proc);
@@ -162,7 +180,13 @@ try {
 
   const health2 = await (await fetch(`${server.base}/health`)).json();
   check("outbox persisted across restart", health2.store.outbox >= 4, JSON.stringify(health2));
-  check("shopping drafts persisted across restart", health2.store.shoppingListsPending >= 2, JSON.stringify(health2));
+  check("shopping drafts persisted across restart", health2.store.shoppingListsPending >= 1, JSON.stringify(health2));
+  const state2 = await (await fetch(`${server.base}/state`)).json();
+  check(
+    "owner approval persisted across restart",
+    state2.shoppingLists.some((s) => s.status === "approved"),
+    JSON.stringify(state2.shoppingLists?.map((s) => [s.id, s.status])),
+  );
 
   const dispatch2 = await c2.callTool("run_morning_dispatch");
   const sc2 = dispatch2.structuredContent ?? {};

@@ -397,6 +397,26 @@ const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse
       res.end(html);
       return;
     }
+    if (url.pathname === "/console/approve" && req.method === "POST") {
+      // The human gate, exercised from the operations console: the owner
+      // approves or rejects a shopping-list draft. This is a console action
+      // (the concept puts the approval in the console), not an MCP tool:
+      // the server never buys anything, and the decision is audited + saved.
+      const body = (await readBody(req)) as { listId?: string; decision?: string } | undefined;
+      const list = body?.listId ? store.data.shoppingLists.find((s) => s.id === body.listId) : undefined;
+      if (!list) {
+        res.writeHead(404, { "content-type": "application/json" });
+        res.end(JSON.stringify({ error: "shopping list not found" }));
+        return;
+      }
+      const decision = body?.decision === "rejected" ? "rejected" : "approved";
+      list.status = decision;
+      store.audit("owner (console)", `shopping_list.${decision}`, `Draft ${list.id} ${decision} from the operations console: ${list.items.map((i) => `${i.qty} x ${i.item}`).join(", ")}.`);
+      store.save();
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify({ ok: true, shoppingList: list }));
+      return;
+    }
     if (url.pathname === "/state") {
       // Read-only view of the whole business state (what the ops console renders).
       res.writeHead(200, { "content-type": "application/json" });

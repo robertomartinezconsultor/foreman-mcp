@@ -214,6 +214,23 @@ async function rpc(method, params) {
   }
   return JSON.parse(raw);
 }
+async function decideList(listId, decision) {
+  setTerminal('Owner decision: ' + decision + ' ' + listId + '…');
+  try {
+    const res = await fetch('/console/approve', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ listId, decision })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+    setTerminal('Shopping list ' + listId + ' is now ' + data.shoppingList.status.toUpperCase() + '. The decision is saved and written to the audit trail. Nothing was purchased.');
+    await loadState();
+  } catch (err) {
+    setTerminal('The approval call failed:\n' + err.message);
+  }
+}
+
 async function callTool(name, args = {}) {
   setTerminal('Calling ' + name + '…');
   document.querySelectorAll('button').forEach(b => b.disabled = true);
@@ -264,9 +281,16 @@ function render(state) {
     '<article class="item"><strong>' + esc(o.to) + '<span class="tag">queued</span></strong><p>' + esc(o.message) + '</p></article>'
   ).join('') : '<div class="empty">Outbox is empty. Run “Prepare tomorrow.”</div>';
 
-  document.getElementById('shopping').innerHTML = approvals.length ? approvals.map(s =>
-    '<article class="item"><strong>' + esc(s.id) + '<span class="tag warn">pending approval</span></strong><p>' + s.items.map(i => esc(i.qty) + ' ' + esc(i.unit) + ' of ' + esc(i.item) + ' — ' + esc(i.reason)).join('<br>') + '</p></article>'
-  ).join('') : '<div class="empty">No purchase drafts waiting for approval.</div>';
+  const allLists = state.shoppingLists;
+  document.getElementById('shopping').innerHTML = allLists.length ? allLists.map(s => {
+    const tag = s.status === 'pending_approval' ? '<span class="tag warn">pending approval</span>'
+      : s.status === 'approved' ? '<span class="tag good">approved</span>' : '<span class="tag bad">rejected</span>';
+    const actions = s.status === 'pending_approval'
+      ? '<p style="margin-top:10px"><button data-approve="' + esc(s.id) + '" style="padding:8px 12px">Approve purchase</button> <button data-reject="' + esc(s.id) + '" style="padding:8px 12px">Reject</button></p>' : '';
+    return '<article class="item"><strong>' + esc(s.id) + tag + '</strong><p>' + s.items.map(i => esc(i.qty) + ' ' + esc(i.unit) + ' of ' + esc(i.item) + ' — ' + esc(i.reason)).join('<br>') + '</p>' + actions + '</article>';
+  }).join('') : '<div class="empty">No purchase drafts yet. Run “Prepare tomorrow.”</div>';
+  document.querySelectorAll('[data-approve]').forEach(b => b.addEventListener('click', () => decideList(b.dataset.approve, 'approved')));
+  document.querySelectorAll('[data-reject]').forEach(b => b.addEventListener('click', () => decideList(b.dataset.reject, 'rejected')));
 
   const audit = [...state.audit].slice(-10).reverse();
   document.getElementById('audit').innerHTML = audit.length ? audit.map(a =>

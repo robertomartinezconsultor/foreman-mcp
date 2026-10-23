@@ -36,7 +36,7 @@ Built for the **Alexa+ track** of the Amazon Developer Hackathon
 Working and verified: persistent store + full remodeling demo dataset,
 all 10 concept tools plus `run_morning_dispatch` (11 tools), the
 dispatch flow with the deterministic composer, a live operations console
-at `/console`, an automated end-to-end gate (**45 assertions across two
+at `/console`, an automated end-to-end gate (**48 assertions across two
 server boots**) and full evidence transcripts in
 [`docs/evidence/`](docs/evidence/).
 
@@ -64,9 +64,11 @@ npm start            # http://localhost:3000/mcp  (PORT env to change)
 
 Health check: `GET /` (store counts, composer in use). Full business state
 (read-only, what the ops console renders): `GET /state`. Live operations
-console (schedule, leads, outbox, approvals, audit trail and a
-voice-command simulator that calls the same MCP tools):
-`http://localhost:3000/console`.
+console (schedule, leads, outbox, audit trail, a voice-command simulator
+that calls the same MCP tools, and the human gate itself: pending
+shopping lists carry **Approve purchase / Reject** buttons whose decision
+is saved, audited and visible in `/state` — smoke-tested click → state in
+the gate): `http://localhost:3000/console`.
 
 The demo dataset (a San Antonio remodeling company: 3 crews, 7 jobs,
 5 leads, 11 inventory items) is seeded on first boot with dates relative

@@ -77,7 +77,7 @@ asks, and the company answers.**
   deterministic fallback — see `docs/product-feedback.md` for the exact
   integration status
 - A persistent JSON store with atomic writes (no database dependency)
-- An automated end-to-end gate (`scripts/verify.mjs`, 45 assertions) and
+- An automated end-to-end gate (`scripts/verify.mjs`, 48 assertions) and
   evidence transcripts (`docs/evidence/`)
 
 ## Try it / testing instructions for judges
@@ -99,7 +99,7 @@ Run it locally:
 npm install
 npm run build
 npm start            # MCP at http://localhost:3000/mcp, console at /console
-npm run verify       # 45-assertion end-to-end gate across two server boots
+npm run verify       # 48-assertion end-to-end gate across two server boots
 ```
 
 Raw protocol smoke test:
@@ -126,6 +126,10 @@ while keeping every fact unchanged; any failure falls back to the draft.
 The full account of what was exercised live, what is implemented behind the
 flag, onboarding friction and feature requests is in
 `docs/product-feedback.md`, which is the text we submit as product feedback.
+Stated plainly there and here: a go/no-go check on submission night found
+**no AWS credentials available on the build machine at all**, so no live
+Bedrock call was made; the integration is documented as implemented, and the
+absence of a live run is declared, not disguised.
 
 ## Open Source mini challenge — fields
 

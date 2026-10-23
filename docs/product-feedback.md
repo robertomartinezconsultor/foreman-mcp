@@ -59,7 +59,12 @@ this build we did **not** have an AWS account with Bedrock model access wired
 to the server, so the live generation path was not exercised end to end; the
 deterministic path was exercised by the full automated gate. We document the
 integration for the AWS Builder mini challenge on that basis and do not claim
-a live Bedrock run we did not make.
+a live Bedrock run we did not make. A formal go/no-go check on submission
+night (Oct 22) confirmed the situation exactly: the build machine has **no
+AWS credentials at all** — no AWS CLI, no `~/.aws` configuration and no
+credential environment variables — so no Bedrock call could even be
+attempted and no billing state could be queried. The honest absence is
+documented here rather than dressed up as evidence.
 
 **What worked well in the integration design.** The Converse API shape is
 simple, and the AWS SDK v3 modular import made it easy to keep Bedrock out of

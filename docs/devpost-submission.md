@@ -6,7 +6,9 @@ Entrant: Roberto Daniel Martínez López / ELTIGRELABS.
 GitHub username: `robertomartinezconsultor`.
 
 > Placeholders in `{{DOUBLE BRACES}}` are filled with the live URLs produced
-> during the submission session (public repo, hosted endpoint, demo video).
+> during the submission session (hosted endpoint, demo video). Known URLs:
+> project repo https://github.com/robertomartinezconsultor/foreman-mcp ·
+> open-source companion https://github.com/robertomartinezconsultor/alexa-mcp-check
 
 ## Project name
 
@@ -82,7 +84,7 @@ asks, and the company answers.**
 
 - **Hosted MCP endpoint:** `{{HOSTED_MCP_ENDPOINT}}`
 - **Live operations console:** `{{HOSTED_CONSOLE_URL}}`
-- **Public repository:** `{{FOREMAN_REPO_URL}}`
+- **Public repository:** https://github.com/robertomartinezconsultor/foreman-mcp
 - **Demo video (under 3 minutes, English):** `{{DEMO_VIDEO_URL}}`
 
 No account, credentials or payment are needed. In the console, use the
@@ -128,7 +130,7 @@ flag, onboarding friction and feature requests is in
 ## Open Source mini challenge — fields
 
 - **Contribution / new project URL:** https://github.com/robertomartinezconsultor/alexa-mcp-check
-- **Project repository URL:** `{{FOREMAN_REPO_URL}}`
+- **Project repository URL:** https://github.com/robertomartinezconsultor/foreman-mcp
 - **GitHub username:** `robertomartinezconsultor`
 - **What we built and why it matters:** `alexa-mcp-check` is a new,
   zero-dependency open-source CLI (MIT) created during the hackathon window
